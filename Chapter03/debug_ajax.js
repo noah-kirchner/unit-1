@@ -1,17 +1,25 @@
-function debugCallback(response){
-	document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'GeoJSON data: ' + JSON.stringify(myData))
-};
-
+// Fetches MegaCities GeoJSON data and displays it in the browser
 function debugAjax(){
-	
-	var myData;
-	
-	fetch("data/MegaCities.geojson")
-		.then(function(response){
-			debugCallback(response);
-		})
+    fetch("data/MegaCities.geojson")        // Request GeoJSON file from data folder
+        .then(function(response){           // Receive raw server response
+            return response.json();         // Convert raw response to JSON
+        })
+        .then(function(response){           // Receive  JSON data
+            // Data IS available
+            debugCallback(response);        // Pass converted data to callback function
+        })
 
-	document.querySelector("#mydiv").insertAdjacentHTML('beforeend' '<br>GeoJSON data:<br>' + JSON.stringify(myData))
+    // Data is NOT available
 };
 
-document.querySelector("#mydiv").insertAdjacentHTML('beforeend', 'GeoJSON data: ' + JSON.stringify(myData))
+// Callback function to display GeoJSON data
+function debugCallback(response){
+    // Data IS available, received as parameter from debugAjax
+    document.querySelector("#mydiv").insertAdjacentHTML(
+        'beforeend',                                        // Insert after existing content
+        '<br>GeoJSON data:<br>' + JSON.stringify(response) // Convert JSON object to readable string
+    );
+};
+
+// Call debugAjax once the DOM is fully loaded
+document.addEventListener('DOMContentLoaded', debugAjax);
